@@ -1,12 +1,28 @@
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
 
+from main.models import Document
+from main.forms import DocumentForm
+
 def index(request):
-    template = loader.get_template('base.html')
+    template = loader.get_template('index.html')
     context = RequestContext(request, {})
     return HttpResponse(template.render(context))
 
 def upload(request):
-    template = loader.get_template('base.html')
-    context = RequestContext(request, {})
-    return HttpResponse(template.render(context))
+    template = loader.get_template('upload.html')
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(file = request.FILES['docfile'])
+            newdoc.save()
+            return HttpResponseRedirect('index')
+    else:
+        form = DocumentForm() # A empty, unbound form
+    return render_to_response(
+        'upload.html',
+        {'form': form},
+        context_instance=RequestContext(request)
+    )
