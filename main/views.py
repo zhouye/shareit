@@ -8,15 +8,19 @@ from main.forms import DocumentForm
 
 def index(request):
     template = loader.get_template('index.html')
-    context = RequestContext(request, {})
-    return HttpResponse(template.render(context))
+    documents = Document.objects.all()
+    return render_to_response(
+        'index.html',
+        {'documents': documents},
+        context_instance=RequestContext(request)
+    )
 
 def upload(request):
     template = loader.get_template('upload.html')
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Document(file = request.FILES['docfile'])
+            newdoc = Document(title = request.POST['title'], file = request.FILES['docfile'])
             newdoc.save()
             return HttpResponseRedirect('index')
     else:
