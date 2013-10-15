@@ -19,12 +19,12 @@ def upload(request):
     template = loader.get_template('main/upload.html')
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
+        if form.is_valid():   
             newdoc = Document(title = request.POST['title'], file = request.FILES['docfile'])
             newdoc.save()
             return HttpResponseRedirect('index')
     else:
-        form = DocumentForm() # A empty, unbound form
+        form = DocumentForm()
     return render_to_response(
         'main/upload.html',
         {'form': form},
