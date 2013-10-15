@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext, loader
+from django.contrib.auth.decorators import login_required
 
 from main.models import Document
 from main.forms import DocumentForm
@@ -15,6 +16,7 @@ def index(request):
         context_instance=RequestContext(request)
     )
 
+@login_required
 def upload(request):
     template = loader.get_template('main/upload.html')
     if request.method == 'POST':
