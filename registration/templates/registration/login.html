@@ -3,6 +3,7 @@
 {% block content %}
     <form action="{% url "auth_login" %}" method="post">{% csrf_token %}
         {{ form.as_p }}
+        <input type="hidden" name="next" value="{% url "index" %}" />
         <input type="submit" value="Submit" />
     </form>
 {% endblock %}
