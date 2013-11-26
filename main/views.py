@@ -8,7 +8,6 @@ from main.models import Document
 from main.forms import DocumentForm
 
 def index(request):
-    template = loader.get_template('main/index.html')
     documents = Document.objects.all()
     return render_to_response(
         'main/index.html',
@@ -17,12 +16,25 @@ def index(request):
     )
 
 @login_required
+def file(request,file_id):
+    document = Document.objects.get(id=int(file_id))
+    if request.method == 'GET':
+        if request.GET.get('add') == '1':
+            
+            document.score = document.score + 1
+            document.save()
+    return render_to_response(
+        'main/file.html',
+        {'document': document},
+        context_instance=RequestContext(request)
+    )       
+@login_required
 def upload(request):
-    template = loader.get_template('main/upload.html')
+
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():   
-            newdoc = Document(title = request.POST['title'], file = request.FILES['docfile'])
+            newdoc = Document(title = request.POST['title'], file = request.FILES['docfile'], score=0)
             newdoc.save()
             return HttpResponseRedirect('index')
     else:

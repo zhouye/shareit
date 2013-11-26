@@ -12,4 +12,5 @@ class Document(models.Model):
   title = models.CharField(max_length=100)
 #  user = models.ForeignKey(User)
   file = models.FileField(upload_to='documents/')
+  score = models.IntegerField()
 # Other fields

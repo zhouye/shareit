@@ -126,6 +126,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'main',
     'registration',
+    'django_comments',
+    'friendship',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
